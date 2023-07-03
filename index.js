@@ -3,25 +3,29 @@
 // Başlangıç Challenge'ı
 
 /**Örnek Görev: İlkini Dön
- * 
+ *
  * Bu örnek sonradan gelecek olan görevleri nasıl çözeceğinizi size gösterecek.
- * 
+ *
  * Aşağdıaki Yüksek dereceden fonskiyonu(higher-order function) kullanarak aşağıdakileri yapınız
  *  1. Stringlerden oluşan bir array'i parametre olarak alın
- *  2. Bir string'i değişken olarak alan bir callback fonksiyonunu parametre olarak alın 
+ *  2. Bir string'i değişken olarak alan bir callback fonksiyonunu parametre olarak alın
  *  3. Array'in İLK elemanını değişken olarak alarak çalışacak olan callback fonksiyonunun sonucunu dönün
- * 
+ *
  * Aşağıdaki kodlar bu görevin nasıl yapılacağına örnek olacaktır
  * Bu fonskiyon 'asas' dönmeli(return)
-*/
+ */
 
 function ilkiniDon(stringArray, callback) {
-  return callback(stringArray[0])
+  return callback(stringArray[0]);
 }
-console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin+metin}));
+console.log(
+  "örnek görev:",
+  ilkiniDon(["as", "sa"], function (metin) {
+    return metin + metin;
+  })
+);
 
 // Başlangıç Challenge'ı Sonu
-
 
 ///// M V P ///////
 
@@ -31,17 +35,29 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
   
   1. skor1 ve skor2 arasındaki fark nedir?
   
+  skor1 ve skor2 arasındaki temel fark, skor1 in görüldüğü üzere closure kullanmasıdır. 
+  skor1 kodu çalıştığı zaman içerideki variable yani değişkenlere erişim sağlayarak onları güncelleyebilme
+  avantajına sahip oluruz.
+
   2. Hangisi bir closure kullanmaktadır? Nasıl tarif edebilirsin? (yarınki derste öğreneceksin :) )
+
+  skor1 closure kullanmaktadır. functiondaki skorArtirici() dan hemen sonraki curly braces yani
+  süslü parantez içindeki let ile tanımlanan skor ona erişilebilen bir fonksiyon döndürüp 
+  return ediliyor. Yani function parentı içindeki değerleri istediğimiz gibi erişim sağlayıp güncelleyebiliyoruz.
   
   3. Hangi durumda skor1 tercih edilebilir? Hangi durumda skor2 daha mantıklıdır?
+  eğer birden fazla yerde skor değişkenine erişim sağlamak istiyorsak skor1 kodu daha mantıklı bir
+  seçenek olacaktır. skor2 kodu ise sadece tek bir yerde kullanacak isek tercih edilebilir.
+  ancak skor2 kodu global scopeda olduğu için dışarıdan erişilebilir yani başka kodlar tarafından
+  kullanılabilir hale gelir. Bu nedenle kullanım kontrolü daha zordur.
 */
 
 // skor1 kodları
 function skorArtirici() {
   let skor = 0;
   return function skorGuncelle() {
-   return skor++;
-  }
+    return skor++;
+  };
 }
 
 const skor1 = skorArtirici();
@@ -53,7 +69,6 @@ function skor2() {
   return skor++;
 }
 
-
 /* Görev 2: takimSkoru() 
 Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
   1. Bir çeyrekte bir takımın ürettiği skoru rastgele(random) elde eden bir sonuc dönünüz(return)
@@ -64,12 +79,22 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru() {
+  const minSkor = 10;
+  const maxSkor = 25;
+  const skor = Math.floor(Math.random() * (maxSkor - minSkor + 1)) + minSkor;
+  return skor;
+}
+function takimSkorlariniGetir(sayi) {
+  const skorlar = [];
+  for (let i = 0; i < sayi; i++) {
+    const skor = takimSkoru();
+    skorlar.push(skor);
+  }
+  return skorlar;
 }
 
-
-
+console.log("Takım skorları", takimSkorlariniGetir(10));
 
 /* Görev 3: macSonucu() 
 Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
@@ -84,16 +109,31 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
   "EvSahibi": 92,
   "KonukTakim": 80
 }
-*/ 
+*/
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(takimSkoru, ceyrekSayisi) {
+  let EvSahibi = 0;
+  let KonukTakim = 0;
+  for (let ceyrek = 1; ceyrek <= ceyrekSayisi; ceyrek++) {
+    let EvsahibiCeyrekSkoru = takimSkoru();
+    let KonukTakimCeyrekSkoru = takimSkoru();
+    EvSahibi += EvsahibiCeyrekSkoru;
+    KonukTakim += KonukTakimCeyrekSkoru;
+    console.log(
+      "Ev Sahibi:" +
+        EvsahibiCeyrekSkoru +
+        " " +
+        "Konuk Takım:" +
+        KonukTakimCeyrekSkoru
+    );
+  }
+  const macSkoru = {
+    EvSahibi: EvSahibi,
+    KonukTakim: KonukTakim,
+  };
+  return macSkoru;
 }
-
-
-
-
-
+console.log(macSonucu(takimSkoru, 4));
 
 /* Zorlayıcı Görev 4: periyotSkoru()
 Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
@@ -107,13 +147,19 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   "KonukTakim": 12
 }
   */
+function periyotSkoru(takimSkoru) {
+  const EvSahibiSkor = takimSkoru();
+  const KonukTakimSkor = takimSkoru();
 
+  const skorlar = {
+    EvSahibi: EvSahibiSkor,
+    KonukTakim: KonukTakimSkor,
+  };
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-
+  return skorlar;
 }
 
+console.log(periyotSkoru(takimSkoru));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -150,13 +196,10 @@ function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
   /*Kodunuzu buraya yazınız*/
 }
 
-
-
-
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
-function sa(){
-  console.log('Kodlar çalışıyor');
-  return 'as';
+function sa() {
+  console.log("Kodlar çalışıyor");
+  return "as";
 }
 sa();
 module.exports = {
@@ -168,4 +211,4 @@ module.exports = {
   macSonucu,
   periyotSkoru,
   skorTabelasi,
-}
+};
